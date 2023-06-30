@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ict.cloud.resource.mapper.OpenstackSubnetsMapper">
+  <resultMap id="BaseResultMap" type="com.ict.cloud.resource.domain.OpenstackSubnets">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_id" jdbcType="VARCHAR" property="projectId" />
+    <result column="subnet_id" jdbcType="VARCHAR" property="subnetId" />
+    <result column="create_at" jdbcType="TIMESTAMP" property="createAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="dns_nameservers" jdbcType="INTEGER" property="dnsNameservers" />
+    <result column="network_id" jdbcType="VARCHAR" property="networkId" />
+    <result column="gateway_id" jdbcType="VARCHAR" property="gatewayId" />
+    <result column="cidr" jdbcType="VARCHAR" property="cidr" />
+    <result column="segment_id" jdbcType="INTEGER" property="segmentId" />
+    <result column="tenant_id" jdbcType="INTEGER" property="tenantId" />
+    <result column="subnet_name" jdbcType="VARCHAR" property="subnetName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, project_id, subnet_id, create_at, updated_at, dns_nameservers, network_id,
+    gateway_id, cidr, segment_id, tenant_id, subnet_name
+  </sql>
+  <select id="selectByExample" parameterType="com.ict.cloud.resource.domain.OpenstackSubnetsCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from openstack_subnets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="rows != null">
+      <if test="offset != null">
+        limit ${offset}, ${rows}
+      </if>
+      <if test="offset == null">
+        limit ${rows}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from openstack_subnets
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from openstack_subnets
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ict.cloud.resource.domain.OpenstackSubnetsCriteria">
+    delete from openstack_subnets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ict.cloud.resource.domain.OpenstackSubnets">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into openstack_subnets (project_id, subnet_id,
+    create_at, updated_at, dns_nameservers,
+    network_id, gateway_id, cidr,
+    segment_id, tenant_id, subnet_name)
+    values (#{projectId,jdbcType=VARCHAR}, #{subnetId,jdbcType=VARCHAR},
+    #{createAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, #{dnsNameservers,jdbcType=VARCHAR},
+    #{networkId,jdbcType=VARCHAR}, #{gatewayId,jdbcType=VARCHAR}, #{cidr,jdbcType=VARCHAR},
+    #{segmentId,jdbcType=INTEGER},
+    #{tenantId,jdbcType=INTEGER},
+    #{subnetName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ict.cloud.resource.domain.OpenstackSubnets">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into openstack_subnets
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="subnetId != null">
+        subnet_id,
+      </if>
+      <if test="createAt != null">
+        create_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="dnsNameservers != null">
+        dns_nameservers,
+      </if>
+      <if test="networkId != null">
+        network_id,
+      </if>
+      <if test="gatewayId != null">
+        gateway_id,
+      </if>
+      <if test="cidr != null">
+        cidr,
+      </if>
+      <if test="segmentId != null">
+        segment_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="subnetName != null">
+        subnet_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="subnetId != null">
+        #{subnetId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dnsNameservers != null">
+        #{dnsNameservers,jdbcType=VARCHAR},
+      </if>
+      <if test="networkId != null">
+        #{networkId,jdbcType=VARCHAR},
+      </if>
+      <if test="gatewayId != null">
+        #{gatewayId,jdbcType=VARCHAR},
+      </if>
+      <if test="cidr != null">
+        #{cidr,jdbcType=VARCHAR},
+      </if>
+      <if test="segmentId != null">
+        #{segmentId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="subnetName != null">
+        #{subnetName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ict.cloud.resource.domain.OpenstackSubnetsCriteria" resultType="java.lang.Long">
+    select count(*) from openstack_subnets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update openstack_subnets
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subnetId != null">
+        subnet_id = #{record.subnetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createAt != null">
+        create_at = #{record.createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedAt != null">
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dnsNameservers != null">
+        dns_nameservers = #{record.dnsNameservers,jdbcType=VARCHAR},
+      </if>
+      <if test="record.networkId != null">
+        network_id = #{record.networkId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gatewayId != null">
+        gateway_id = #{record.gatewayId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cidr != null">
+        cidr = #{record.cidr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.segmentId != null">
+        segment_id = #{record.segmentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.tenantId != null">
+        tenant_id = #{record.tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subnetName != null">
+        subnet_name = #{record.subnetName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update openstack_subnets
+    set id = #{record.id,jdbcType=INTEGER},
+    project_id = #{record.projectId,jdbcType=VARCHAR},
+    subnet_id = #{record.subnetId,jdbcType=VARCHAR},
+    create_at = #{record.createAt,jdbcType=TIMESTAMP},
+    updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+    dns_nameservers = #{record.dnsNameservers,jdbcType=VARCHAR},
+    network_id = #{record.networkId,jdbcType=VARCHAR},
+    gateway_id = #{record.gatewayId,jdbcType=VARCHAR},
+    cidr = #{record.cidr,jdbcType=VARCHAR},
+    segment_id = #{record.segmentId,jdbcType=INTEGER},
+    tenant_id = #{record.tenantId,jdbcType=INTEGER},
+    subnet_name = #{record.subnetName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ict.cloud.resource.domain.OpenstackSubnets">
+    update openstack_subnets
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="subnetId != null">
+        subnet_id = #{subnetId,jdbcType=VARCHAR},
+      </if>
+      <if test="createAt != null">
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dnsNameservers != null">
+        dns_nameservers = #{dnsNameservers,jdbcType=VARCHAR},
+      </if>
+      <if test="networkId != null">
+        network_id = #{networkId,jdbcType=VARCHAR},
+      </if>
+      <if test="gatewayId != null">
+        gateway_id = #{gatewayId,jdbcType=VARCHAR},
+      </if>
+      <if test="cidr != null">
+        cidr = #{cidr,jdbcType=VARCHAR},
+      </if>
+      <if test="segmentId != null">
+        segment_id = #{segmentId,jdbcType=INTEGER},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+      </if>
+      <if test="subnetName != null">
+        subnet_name = #{subnetName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ict.cloud.resource.domain.OpenstackSubnets">
+    update openstack_subnets
+    set project_id = #{projectId,jdbcType=VARCHAR},
+        subnet_id = #{subnetId,jdbcType=VARCHAR},
+        create_at = #{createAt,jdbcType=TIMESTAMP},
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+        dns_nameservers = #{dnsNameservers,jdbcType=VARCHAR},
+        network_id = #{networkId,jdbcType=VARCHAR},
+        gateway_id = #{gatewayId,jdbcType=VARCHAR},
+        cidr = #{cidr,jdbcType=VARCHAR},
+        segment_id = #{segmentId,jdbcType=INTEGER},
+        tenant_id = #{tenantId,jdbcType=INTEGER},
+        subnet_name = #{subnetName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectOneByExample" parameterType="com.ict.cloud.resource.domain.OpenstackSubnetsCriteria" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from openstack_subnets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
+
+  <select id="getAllSubnets" resultMap="BaseResultMap">
+    select * from openstack_subnets
+  </select>
+
+</mapper>

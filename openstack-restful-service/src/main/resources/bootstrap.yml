@@ -1,0 +1,114 @@
+spring:
+  profiles:
+    active: dev
+
+  application:
+    name: openstack-mgmt
+
+  resources:
+    static-locations: classpath:/resources/,classpath:/static/
+
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false # 禁用ribbon，使用loadbalancer
+
+  servlet:
+    multipart:
+      max-file-size: 3000MB #单文件上传最大大小，默认1Mb
+      max-request-size: 30000MB #多文件上传时最大大小,默认10Mb
+
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+#feign.sentinel.enabled: true
+#feign:
+#  client:
+#    config:
+#      account-service:
+#        connectTimeout: 30000
+#        readTimeout: 30000
+
+mybatis:
+  mapper-locations: classpath*:mybatis/*.xml
+  type-aliases-package: com.ict.operate.entity
+
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+encrypt.body.aes-key: 123
+
+webbas:
+  security:
+    login-processing-url: /api/v1/auth/login/verify
+    admin-login-processing-url: /api/v1/auth/admin/login/verify
+    permit-all:
+      - /api/v1/auth/tenant/register
+      - /websshpage
+      - /api/v1/auth/checkCode/sms/sendByTel
+      - /api/v1/aut/checkCode/image
+      - /api/v1/product-order/category
+      - /api/v1/product-order/category/document
+      - /api/v1/product-order/document/**
+      - /api/v1/physical_server/instances/**
+      - /api/v1/physical_server/resources/**
+      - /api/v1/product-order/product/*
+      - /api/v1/auth/message
+      - /api/v1/product-order/productinstance/getByInstanceUuid
+      - /api/v1/product-order/material/product/**
+      - /api/v1/billing-management/bill
+      - /api/v1/expense/account/id/*
+      - /api/v1/expense/account/paybill
+      - /api/v1/billing-management/bill/unpaid
+      - /api/v1/expense/consume
+      - /api/v1/vmware_server/instances/**
+      - /api/v1/vmware_server/resources/**
+      - /api/v1/product-order/orderdetail/**
+      - /api/v1/ssh/**
+    ignoring:
+      - /favicon.ico
+      - /swagger-ui.html
+      - /doc.html
+      - /v2/api-docs
+    logout-url: /api/v1/auth/login/logout
+
+SMS:
+  uid: hudengfeng
+  key: d41d8cd98f00b204e980
+
+# token setting
+jwt:
+  secret: cloud-computing
+  expiration: 43200000
+  header: x-auth-header
+
+#设置session 生效时间，单位秒
+server.servlet.session.timeout: 7200
+
+
+# 分类定义 与 数据库code一致
+category:
+  physicalServer: physical_server
+  hpc: hpc
+  resourcePackages: resource_packages
+  vmware: vmware_server
+  networkServer: network_server
+
+monitor:
+  log:
+    open: true
+    return:
+      open: false
+
+product-order:
+  feign:
+    name: cloud
+          
+billing-management:
+  feign:
+    name: billing-mgmt      

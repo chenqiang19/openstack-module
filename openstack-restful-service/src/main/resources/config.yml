@@ -1,0 +1,13 @@
+login:
+  tenantName: admin
+  user: admin
+  password: smartcore.123
+
+controller:
+  url: http://192.20.4.253:5000/v3
+  ip: 192.20.4.253
+#  url: http://172.16.24.253:5000/v3
+#  ip: 172.16.24.253
+
+log:
+  path: xxxxxx

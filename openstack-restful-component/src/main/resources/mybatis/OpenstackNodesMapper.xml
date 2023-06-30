@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ict.cloud.resource.mapper.OpenstackNodesMapper">
+  <resultMap id="BaseResultMap" type="com.ict.cloud.resource.domain.OpenstackNodes">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="instance_uuid" jdbcType="VARCHAR" property="instanceUuid" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="provision_state" jdbcType="VARCHAR" property="provisionState" />
+    <result column="power_state" jdbcType="VARCHAR" property="powerState" />
+    <result column="vcpus" jdbcType="INTEGER" property="vcpus" />
+    <result column="memory_mb" jdbcType="INTEGER" property="memoryMb" />
+    <result column="local_gb" jdbcType="INTEGER" property="localGb" />
+    <result column="cpu_arch" jdbcType="VARCHAR" property="cpuArch" />
+    <result column="gpu_flag" jdbcType="INTEGER" property="gpuFlag" />
+    <result column="machine_flag" jdbcType="VARCHAR" property="machineFlag" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, instance_uuid, uuid, provision_state, power_state, vcpus, memory_mb, local_gb, 
+    cpu_arch, gpu_flag, machine_flag
+  </sql>
+  <select id="selectByExample" parameterType="com.ict.cloud.resource.domain.OpenstackNodesCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from openstack_nodes
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="rows != null">
+      <if test="offset != null">
+        limit ${offset}, ${rows}
+      </if>
+      <if test="offset == null">
+        limit ${rows}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from openstack_nodes
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from openstack_nodes
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ict.cloud.resource.domain.OpenstackNodesCriteria">
+    delete from openstack_nodes
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ict.cloud.resource.domain.OpenstackNodes">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into openstack_nodes (instance_uuid, uuid, provision_state, 
+      power_state, vcpus, memory_mb, 
+      local_gb, cpu_arch, gpu_flag, 
+      machine_flag)
+    values (#{instanceUuid,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{provisionState,jdbcType=VARCHAR}, 
+      #{powerState,jdbcType=VARCHAR}, #{vcpus,jdbcType=INTEGER}, #{memoryMb,jdbcType=INTEGER}, 
+      #{localGb,jdbcType=INTEGER}, #{cpuArch,jdbcType=VARCHAR}, #{gpuFlag,jdbcType=INTEGER}, 
+      #{machineFlag,jdbcType=VARCHAR})
+	ON DUPLICATE KEY UPDATE
+    instance_uuid=#{instanceUuid},provision_state=#{provisionState},power_state=#{powerState},vcpus=#{vcpus},
+    memory_mb=#{memoryMb},local_gb=#{localGb},gpu_flag=#{gpuFlag},machine_flag=#{machineFlag}			   
+  </insert>
+  <insert id="insertSelective" parameterType="com.ict.cloud.resource.domain.OpenstackNodes">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into openstack_nodes
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="instanceUuid != null">
+        instance_uuid,
+      </if>
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="provisionState != null">
+        provision_state,
+      </if>
+      <if test="powerState != null">
+        power_state,
+      </if>
+      <if test="vcpus != null">
+        vcpus,
+      </if>
+      <if test="memoryMb != null">
+        memory_mb,
+      </if>
+      <if test="localGb != null">
+        local_gb,
+      </if>
+      <if test="cpuArch != null">
+        cpu_arch,
+      </if>
+      <if test="gpuFlag != null">
+        gpu_flag,
+      </if>
+      <if test="machineFlag != null">
+        machine_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="instanceUuid != null">
+        #{instanceUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="provisionState != null">
+        #{provisionState,jdbcType=VARCHAR},
+      </if>
+      <if test="powerState != null">
+        #{powerState,jdbcType=VARCHAR},
+      </if>
+      <if test="vcpus != null">
+        #{vcpus,jdbcType=INTEGER},
+      </if>
+      <if test="memoryMb != null">
+        #{memoryMb,jdbcType=INTEGER},
+      </if>
+      <if test="localGb != null">
+        #{localGb,jdbcType=INTEGER},
+      </if>
+      <if test="cpuArch != null">
+        #{cpuArch,jdbcType=VARCHAR},
+      </if>
+      <if test="gpuFlag != null">
+        #{gpuFlag,jdbcType=INTEGER},
+      </if>
+      <if test="machineFlag != null">
+        #{machineFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ict.cloud.resource.domain.OpenstackNodesCriteria" resultType="java.lang.Long">
+    select count(*) from openstack_nodes
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update openstack_nodes
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.instanceUuid != null">
+        instance_uuid = #{record.instanceUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uuid != null">
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provisionState != null">
+        provision_state = #{record.provisionState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.powerState != null">
+        power_state = #{record.powerState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vcpus != null">
+        vcpus = #{record.vcpus,jdbcType=INTEGER},
+      </if>
+      <if test="record.memoryMb != null">
+        memory_mb = #{record.memoryMb,jdbcType=INTEGER},
+      </if>
+      <if test="record.localGb != null">
+        local_gb = #{record.localGb,jdbcType=INTEGER},
+      </if>
+      <if test="record.cpuArch != null">
+        cpu_arch = #{record.cpuArch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gpuFlag != null">
+        gpu_flag = #{record.gpuFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.machineFlag != null">
+        machine_flag = #{record.machineFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update openstack_nodes
+    set id = #{record.id,jdbcType=INTEGER},
+      instance_uuid = #{record.instanceUuid,jdbcType=VARCHAR},
+      uuid = #{record.uuid,jdbcType=VARCHAR},
+      provision_state = #{record.provisionState,jdbcType=VARCHAR},
+      power_state = #{record.powerState,jdbcType=VARCHAR},
+      vcpus = #{record.vcpus,jdbcType=INTEGER},
+      memory_mb = #{record.memoryMb,jdbcType=INTEGER},
+      local_gb = #{record.localGb,jdbcType=INTEGER},
+      cpu_arch = #{record.cpuArch,jdbcType=VARCHAR},
+      gpu_flag = #{record.gpuFlag,jdbcType=INTEGER},
+      machine_flag = #{record.machineFlag,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ict.cloud.resource.domain.OpenstackNodes">
+    update openstack_nodes
+    <set>
+      <if test="instanceUuid != null">
+        instance_uuid = #{instanceUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="provisionState != null">
+        provision_state = #{provisionState,jdbcType=VARCHAR},
+      </if>
+      <if test="powerState != null">
+        power_state = #{powerState,jdbcType=VARCHAR},
+      </if>
+      <if test="vcpus != null">
+        vcpus = #{vcpus,jdbcType=INTEGER},
+      </if>
+      <if test="memoryMb != null">
+        memory_mb = #{memoryMb,jdbcType=INTEGER},
+      </if>
+      <if test="localGb != null">
+        local_gb = #{localGb,jdbcType=INTEGER},
+      </if>
+      <if test="cpuArch != null">
+        cpu_arch = #{cpuArch,jdbcType=VARCHAR},
+      </if>
+      <if test="gpuFlag != null">
+        gpu_flag = #{gpuFlag,jdbcType=INTEGER},
+      </if>
+      <if test="machineFlag != null">
+        machine_flag = #{machineFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ict.cloud.resource.domain.OpenstackNodes">
+    update openstack_nodes
+    set instance_uuid = #{instanceUuid,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      provision_state = #{provisionState,jdbcType=VARCHAR},
+      power_state = #{powerState,jdbcType=VARCHAR},
+      vcpus = #{vcpus,jdbcType=INTEGER},
+      memory_mb = #{memoryMb,jdbcType=INTEGER},
+      local_gb = #{localGb,jdbcType=INTEGER},
+      cpu_arch = #{cpuArch,jdbcType=VARCHAR},
+      gpu_flag = #{gpuFlag,jdbcType=INTEGER},
+      machine_flag = #{machineFlag,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectOneByExample" parameterType="com.ict.cloud.resource.domain.OpenstackNodesCriteria" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from openstack_nodes
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
+  <select id="selectAllExample" parameterType="com.ict.cloud.resource.domain.OpenstackNodesCriteria" resultMap="BaseResultMap">
+    select * from openstack_nodes
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+</mapper>

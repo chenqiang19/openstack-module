@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="OFF" monitorInterval="300">
+    <properties>
+        <!-- 日志存放目录 -->
+        <property name="log.basedir">/root/log/cloud</property>
+        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t-%L] %p %c{36} %L %M - %m%xEx%n</property>
+        <property name="SPLIT.SIZE">30 MB</property>
+        <property name="SPLIT.TIME">1</property>
+        <property name="SPLIT.ROLLOVER.TIME">60</property>
+    </properties>
+    <Appenders>
+
+        <Console name="ConsoleLog" target="SYSTEM_OUT">
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${PATTERN}"/>
+        </Console>
+
+        <RollingFile name="RollingErrorLog" fileName="${log.basedir}/error.log"
+                     filePattern="${log.basedir}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log.gz">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${PATTERN}"/>
+            <SizeBasedTriggeringPolicy size="${SPLIT.SIZE}"/>
+        </RollingFile>
+
+        <RollingFile name="RollingFileLog" fileName="${log.basedir}/info.log"
+                     filePattern="${log.basedir}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}.log.gz" follow="true">
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy size="${SPLIT.TIME}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${SPLIT.ROLLOVER.TIME}"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <appender-ref ref="ConsoleLog"/>
+            <appender-ref ref="RollingErrorLog"/>
+            <appender-ref ref="RollingFileLog"/>
+        </Root>
+
+        <logger name="org.springframework" level="warn"></logger>
+        <logger name="org.mybatis" level="warn"></logger>
+        <logger name="org.hibernate.validator.internal.util.Version" level="WARN" />
+        <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR" />
+        <logger name="org.apache.coyote.http11.Http11NioProtocol" level="WARN" />
+        <logger name="org.apache.tomcat.util.net.NioSelectorPool" level="WARN" />
+        <logger name="io.netty" level="warn" />
+        <logger name="org.hibernate.validator" level="warn" />
+        <logger name="springfox.documentation" level="ERROR" />
+        <logger name="io.swagger" level="ERROR" />
+    </Loggers>
+</Configuration>

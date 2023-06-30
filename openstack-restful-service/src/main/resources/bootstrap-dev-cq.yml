@@ -1,0 +1,93 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        heart-beat-interval: 5 # 客户端向服务端发送心跳的时间间隔，默认5s
+        heart-beat-timeout: 10 # 服务端没有接受到客户端心跳请求就将其设为不健康的时间间隔，默认为15s
+        register-enabled: true # 默认true，当无需对外提供服务，可以设为false
+
+  datasource:
+    #    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://192.20.4.200:3307/cloud_computing2.0?characterEncoding=utf8&useSSL=false&allowMultiQueries=true&autoReconnect=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      username: cloud
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      filter:
+        slf4j:
+          enabled: true
+          statement-create-after-log-enabled: false
+          statement-close-after-log-enabled: false
+          result-set-open-after-log-enabled: false
+          result-set-close-after-log-enabled: false
+
+  redis:
+    # password: foobared
+#    host: 192.20.4.200
+#    port: 6380
+    cluster:
+      nodes:
+        - 192.20.4.200:6380
+        - 192.20.4.200:6381
+        - 192.20.4.200:6382
+      max-redirects: 3
+    lettuce.pool:
+      max-idle: 500  # 连接池中的最大空闲连接，默认值也是8。
+      min-idle: 50  #连接池中的最小空闲连接，默认值也是0。
+      max-active: 2000  # 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
+      max-wait: 1000  # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException
+
+server:
+  port: 8083
+
+dubbo:
+  scan:
+    base-packages: com.ict.cloud.wapper.rpcImpl
+  protocol:
+    name: dubbo
+    port: -1
+  #  cloud:
+  #    subscribed-services: openstack-mgmt
+  registry:
+    address: nacos://localhost:8848
+
+logging:
+  #enable: false # 正式环境将不开启feign日志记录
+  level:
+    com.ict.cloud.feign.**: DEBUG # 配置在com.ict.cloud.config.OpenFeignLogConfig
+  config: classpath:log4j2-dev.xml
+
+seata:
+  enabled: false
+  application-id: ${spring.application.name}
+  tx-service-group: ${spring.application.name}_group #此处配置自定义的seata事务分组名称
+  enable-auto-data-source-proxy: true          #开启数据库代理
+  #  data-source-proxy-mode: AT
+  service:
+    vgroup-mapping:
+      svc-mgmt: default
+    grouplist:
+      default: 127.0.0.1:8091
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 192.20.4.200:8849,192.20.4.200:8850,192.20.4.200:8851
+      group: SEATA_GROUP
+      namespace:
+      username: nacos
+      password: nacos
+      cluster: default
+  config:
+    type: nacos
+    nacos:
+      namespace:
+      serverAddr: 192.20.4.200:8849,192.20.4.200:8850,192.20.4.200:8851
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+
+
+logging.level.io.seata: debug
+

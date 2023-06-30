@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ict.cloud.resource.mapper.OpenstackResourceMapper">
+  <resultMap id="BaseResultMap" type="com.ict.cloud.resource.domain.OpenstackResource">
+    <id column="id" jdbcType="INTEGER" property="id" />
+	<result column="instance_id" jdbcType="INTEGER" property="instanceId" />																
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="vcpus_used" jdbcType="INTEGER" property="vcpusUsed" />
+    <result column="hypervisor_type" jdbcType="VARCHAR" property="hypervisorType" />
+    <result column="local_gb_used" jdbcType="INTEGER" property="localGbUsed" />
+    <result column="vcpus" jdbcType="INTEGER" property="vcpus" />
+    <result column="hypervisor_hostname" jdbcType="VARCHAR" property="hypervisorHostname" />
+    <result column="memory_mb_used" jdbcType="INTEGER" property="memoryMbUsed" />
+    <result column="memory_mb" jdbcType="INTEGER" property="memoryMb" />
+    <result column="current_workload" jdbcType="INTEGER" property="currentWorkload" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="host_ip" jdbcType="VARCHAR" property="hostIp" />
+    <result column="running_vms" jdbcType="INTEGER" property="runningVms" />
+    <result column="free_disk_gb" jdbcType="INTEGER" property="freeDiskGb" />
+    <result column="hypervisor_version" jdbcType="VARCHAR" property="hypervisorVersion" />
+    <result column="disk_available_least" jdbcType="INTEGER" property="diskAvailableLeast" />
+    <result column="local_gb" jdbcType="INTEGER" property="localGb" />
+    <result column="free_ram_mb" jdbcType="INTEGER" property="freeRamMb" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, instance_id, status, vcpus_used, hypervisor_type, local_gb_used, vcpus, hypervisor_hostname, 
+    memory_mb_used, memory_mb, current_workload, state, host_ip, running_vms, free_disk_gb, 
+    hypervisor_version, disk_available_least, local_gb, free_ram_mb
+  </sql>
+  <select id="selectByExample" parameterType="com.ict.cloud.resource.domain.OpenstackResourceCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from openstack_resource
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="rows != null">
+      <if test="offset != null">
+        limit ${offset}, ${rows}
+      </if>
+      <if test="offset == null">
+        limit ${rows}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from openstack_resource
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from openstack_resource
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ict.cloud.resource.domain.OpenstackResourceCriteria">
+    delete from openstack_resource
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ict.cloud.resource.domain.OpenstackResource">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into openstack_resource (instance_id, status, vcpus_used, 
+	  hypervisor_type, local_gb_used, vcpus, 
+	  hypervisor_hostname, memory_mb_used, memory_mb, 
+	  current_workload, state, host_ip, 
+	  running_vms, free_disk_gb, hypervisor_version, 
+	  disk_available_least, local_gb, free_ram_mb)
+    values (#{instanceId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{vcpusUsed,jdbcType=INTEGER}, #{hypervisorType,jdbcType=VARCHAR}, 
+      #{localGbUsed,jdbcType=INTEGER}, #{vcpus,jdbcType=INTEGER}, #{hypervisorHostname,jdbcType=VARCHAR}, 
+      #{memoryMbUsed,jdbcType=INTEGER}, #{memoryMb,jdbcType=INTEGER}, #{currentWorkload,jdbcType=INTEGER}, 
+      #{state,jdbcType=VARCHAR}, #{hostIp,jdbcType=VARCHAR}, #{runningVms,jdbcType=INTEGER}, 
+      #{freeDiskGb,jdbcType=INTEGER}, #{hypervisorVersion,jdbcType=VARCHAR}, #{diskAvailableLeast,jdbcType=INTEGER}, 
+      #{localGb,jdbcType=INTEGER}, #{freeRamMb,jdbcType=INTEGER})
+    ON DUPLICATE KEY UPDATE
+    status=#{status},vcpus_used=#{vcpusUsed},local_gb_used=#{localGbUsed},vcpus=#{vcpus},
+    memory_mb_used=#{memoryMbUsed},memory_mb=#{memoryMb},state=#{state},free_disk_gb=#{freeDiskGb},
+    disk_available_least=#{diskAvailableLeast},local_gb=#{localGb},free_ram_mb=#{freeRamMb}
+  </insert>
+  <insert id="insertSelective" parameterType="com.ict.cloud.resource.domain.OpenstackResource">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into openstack_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+	  <if test="instanceId != null">
+        instance_id,
+      </if>							
+      <if test="status != null">
+        status,
+      </if>
+      <if test="vcpusUsed != null">
+        vcpus_used,
+      </if>
+      <if test="hypervisorType != null">
+        hypervisor_type,
+      </if>
+      <if test="localGbUsed != null">
+        local_gb_used,
+      </if>
+      <if test="vcpus != null">
+        vcpus,
+      </if>
+      <if test="hypervisorHostname != null">
+        hypervisor_hostname,
+      </if>
+      <if test="memoryMbUsed != null">
+        memory_mb_used,
+      </if>
+      <if test="memoryMb != null">
+        memory_mb,
+      </if>
+      <if test="currentWorkload != null">
+        current_workload,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="hostIp != null">
+        host_ip,
+      </if>
+      <if test="runningVms != null">
+        running_vms,
+      </if>
+      <if test="freeDiskGb != null">
+        free_disk_gb,
+      </if>
+      <if test="hypervisorVersion != null">
+        hypervisor_version,
+      </if>
+      <if test="diskAvailableLeast != null">
+        disk_available_least,
+      </if>
+      <if test="localGb != null">
+        local_gb,
+      </if>
+      <if test="freeRamMb != null">
+        free_ram_mb,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	  <if test="instanceId != null">
+        #{instanceId,jdbcType=INTEGER},
+      </if>							
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="vcpusUsed != null">
+        #{vcpusUsed,jdbcType=INTEGER},
+      </if>
+      <if test="hypervisorType != null">
+        #{hypervisorType,jdbcType=VARCHAR},
+      </if>
+      <if test="localGbUsed != null">
+        #{localGbUsed,jdbcType=INTEGER},
+      </if>
+      <if test="vcpus != null">
+        #{vcpus,jdbcType=INTEGER},
+      </if>
+      <if test="hypervisorHostname != null">
+        #{hypervisorHostname,jdbcType=VARCHAR},
+      </if>
+      <if test="memoryMbUsed != null">
+        #{memoryMbUsed,jdbcType=INTEGER},
+      </if>
+      <if test="memoryMb != null">
+        #{memoryMb,jdbcType=INTEGER},
+      </if>
+      <if test="currentWorkload != null">
+        #{currentWorkload,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="hostIp != null">
+        #{hostIp,jdbcType=VARCHAR},
+      </if>
+      <if test="runningVms != null">
+        #{runningVms,jdbcType=INTEGER},
+      </if>
+      <if test="freeDiskGb != null">
+        #{freeDiskGb,jdbcType=INTEGER},
+      </if>
+      <if test="hypervisorVersion != null">
+        #{hypervisorVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="diskAvailableLeast != null">
+        #{diskAvailableLeast,jdbcType=INTEGER},
+      </if>
+      <if test="localGb != null">
+        #{localGb,jdbcType=INTEGER},
+      </if>
+      <if test="freeRamMb != null">
+        #{freeRamMb,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ict.cloud.resource.domain.OpenstackResourceCriteria" resultType="java.lang.Long">
+    select count(*) from openstack_resource
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update openstack_resource
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+	  <if test="record.instanceId != null">
+        instance_id = #{record.instanceId,jdbcType=INTEGER},
+      </if>								   	   
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vcpusUsed != null">
+        vcpus_used = #{record.vcpusUsed,jdbcType=INTEGER},
+      </if>
+      <if test="record.hypervisorType != null">
+        hypervisor_type = #{record.hypervisorType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.localGbUsed != null">
+        local_gb_used = #{record.localGbUsed,jdbcType=INTEGER},
+      </if>
+      <if test="record.vcpus != null">
+        vcpus = #{record.vcpus,jdbcType=INTEGER},
+      </if>
+      <if test="record.hypervisorHostname != null">
+        hypervisor_hostname = #{record.hypervisorHostname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memoryMbUsed != null">
+        memory_mb_used = #{record.memoryMbUsed,jdbcType=INTEGER},
+      </if>
+      <if test="record.memoryMb != null">
+        memory_mb = #{record.memoryMb,jdbcType=INTEGER},
+      </if>
+      <if test="record.currentWorkload != null">
+        current_workload = #{record.currentWorkload,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hostIp != null">
+        host_ip = #{record.hostIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runningVms != null">
+        running_vms = #{record.runningVms,jdbcType=INTEGER},
+      </if>
+      <if test="record.freeDiskGb != null">
+        free_disk_gb = #{record.freeDiskGb,jdbcType=INTEGER},
+      </if>
+      <if test="record.hypervisorVersion != null">
+        hypervisor_version = #{record.hypervisorVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.diskAvailableLeast != null">
+        disk_available_least = #{record.diskAvailableLeast,jdbcType=INTEGER},
+      </if>
+      <if test="record.localGb != null">
+        local_gb = #{record.localGb,jdbcType=INTEGER},
+      </if>
+      <if test="record.freeRamMb != null">
+        free_ram_mb = #{record.freeRamMb,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update openstack_resource
+    set id = #{record.id,jdbcType=INTEGER},
+	  instance_id = #{record.instanceId,jdbcType=INTEGER},											  
+      status = #{record.status,jdbcType=VARCHAR},
+      vcpus_used = #{record.vcpusUsed,jdbcType=INTEGER},
+      hypervisor_type = #{record.hypervisorType,jdbcType=VARCHAR},
+      local_gb_used = #{record.localGbUsed,jdbcType=INTEGER},
+      vcpus = #{record.vcpus,jdbcType=INTEGER},
+      hypervisor_hostname = #{record.hypervisorHostname,jdbcType=VARCHAR},
+      memory_mb_used = #{record.memoryMbUsed,jdbcType=INTEGER},
+      memory_mb = #{record.memoryMb,jdbcType=INTEGER},
+      current_workload = #{record.currentWorkload,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=VARCHAR},
+      host_ip = #{record.hostIp,jdbcType=VARCHAR},
+      running_vms = #{record.runningVms,jdbcType=INTEGER},
+      free_disk_gb = #{record.freeDiskGb,jdbcType=INTEGER},
+      hypervisor_version = #{record.hypervisorVersion,jdbcType=VARCHAR},
+      disk_available_least = #{record.diskAvailableLeast,jdbcType=INTEGER},
+      local_gb = #{record.localGb,jdbcType=INTEGER},
+      free_ram_mb = #{record.freeRamMb,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ict.cloud.resource.domain.OpenstackResource">
+    update openstack_resource
+    <set>
+	  <if test="instanceId != null">
+        instance_id = #{instanceId,jdbcType=INTEGER},
+      </if>							
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="vcpusUsed != null">
+        vcpus_used = #{vcpusUsed,jdbcType=INTEGER},
+      </if>
+      <if test="hypervisorType != null">
+        hypervisor_type = #{hypervisorType,jdbcType=VARCHAR},
+      </if>
+      <if test="localGbUsed != null">
+        local_gb_used = #{localGbUsed,jdbcType=INTEGER},
+      </if>
+      <if test="vcpus != null">
+        vcpus = #{vcpus,jdbcType=INTEGER},
+      </if>
+      <if test="hypervisorHostname != null">
+        hypervisor_hostname = #{hypervisorHostname,jdbcType=VARCHAR},
+      </if>
+      <if test="memoryMbUsed != null">
+        memory_mb_used = #{memoryMbUsed,jdbcType=INTEGER},
+      </if>
+      <if test="memoryMb != null">
+        memory_mb = #{memoryMb,jdbcType=INTEGER},
+      </if>
+      <if test="currentWorkload != null">
+        current_workload = #{currentWorkload,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="hostIp != null">
+        host_ip = #{hostIp,jdbcType=VARCHAR},
+      </if>
+      <if test="runningVms != null">
+        running_vms = #{runningVms,jdbcType=INTEGER},
+      </if>
+      <if test="freeDiskGb != null">
+        free_disk_gb = #{freeDiskGb,jdbcType=INTEGER},
+      </if>
+      <if test="hypervisorVersion != null">
+        hypervisor_version = #{hypervisorVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="diskAvailableLeast != null">
+        disk_available_least = #{diskAvailableLeast,jdbcType=INTEGER},
+      </if>
+      <if test="localGb != null">
+        local_gb = #{localGb,jdbcType=INTEGER},
+      </if>
+      <if test="freeRamMb != null">
+        free_ram_mb = #{freeRamMb,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ict.cloud.resource.domain.OpenstackResource">
+    update openstack_resource
+	set instance_id = #{instanceId,jdbcType=INTEGER},												 
+      status = #{status,jdbcType=VARCHAR},
+      vcpus_used = #{vcpusUsed,jdbcType=INTEGER},
+      hypervisor_type = #{hypervisorType,jdbcType=VARCHAR},
+      local_gb_used = #{localGbUsed,jdbcType=INTEGER},
+      vcpus = #{vcpus,jdbcType=INTEGER},
+      hypervisor_hostname = #{hypervisorHostname,jdbcType=VARCHAR},
+      memory_mb_used = #{memoryMbUsed,jdbcType=INTEGER},
+      memory_mb = #{memoryMb,jdbcType=INTEGER},
+      current_workload = #{currentWorkload,jdbcType=INTEGER},
+      state = #{state,jdbcType=VARCHAR},
+      host_ip = #{hostIp,jdbcType=VARCHAR},
+      running_vms = #{runningVms,jdbcType=INTEGER},
+      free_disk_gb = #{freeDiskGb,jdbcType=INTEGER},
+      hypervisor_version = #{hypervisorVersion,jdbcType=VARCHAR},
+      disk_available_least = #{diskAvailableLeast,jdbcType=INTEGER},
+      local_gb = #{localGb,jdbcType=INTEGER},
+      free_ram_mb = #{freeRamMb,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectOneByExample" parameterType="com.ict.cloud.resource.domain.OpenstackResourceCriteria" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from openstack_resource
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
+  <select id="selectAllExample" parameterType="com.ict.cloud.resource.domain.OpenstackResourceCriteria" resultMap="BaseResultMap">
+    select * from openstack_resource
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+</mapper>

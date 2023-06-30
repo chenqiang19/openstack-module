@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ict.cloud.resource.mapper.OpenstackFlavorsMapper">
+  <resultMap id="BaseResultMap" type="com.ict.cloud.resource.domain.OpenstackFlavors">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="flavor_type" jdbcType="VARCHAR" property="flavorType" />
+    <result column="flavor_id" jdbcType="VARCHAR" property="flavorId" />
+    <result column="flavor_ram" jdbcType="INTEGER" property="flavorRam" />
+    <result column="flavor_disk" jdbcType="INTEGER" property="flavorDisk" />
+    <result column="flavor_name" jdbcType="VARCHAR" property="flavorName" />
+    <result column="flavor_vcpu" jdbcType="INTEGER" property="flavorVcpu" />
+    <result column="extra_specs" jdbcType="VARCHAR" property="extraSpecs" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, flavor_type, flavor_id, flavor_ram, flavor_disk, flavor_name, flavor_vcpu, extra_specs
+  </sql>
+  <select id="selectByExample" parameterType="com.ict.cloud.resource.domain.OpenstackFlavorsCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from openstack_flavors
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="rows != null">
+      <if test="offset != null">
+        limit ${offset}, ${rows}
+      </if>
+      <if test="offset == null">
+        limit ${rows}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from openstack_flavors
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from openstack_flavors
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ict.cloud.resource.domain.OpenstackFlavorsCriteria">
+    delete from openstack_flavors
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ict.cloud.resource.domain.OpenstackFlavors">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into openstack_flavors (flavor_type, flavor_id, flavor_ram,
+      flavor_disk, flavor_name, flavor_vcpu,
+      extra_specs)
+    values (#{flavorType,jdbcType=VARCHAR}, #{flavorId,jdbcType=VARCHAR}, #{flavorRam,jdbcType=INTEGER},
+      #{flavorDisk,jdbcType=INTEGER}, #{flavorName,jdbcType=VARCHAR}, #{flavorVcpu,jdbcType=INTEGER}, 
+      #{extraSpecs,jdbcType=VARCHAR})
+    ON DUPLICATE KEY UPDATE
+    flavor_ram=#{flavorRam},flavor_disk=#{flavorDisk},flavor_vcpu=#{flavorVcpu}
+  </insert>
+  <insert id="insertSelective" parameterType="com.ict.cloud.resource.domain.OpenstackFlavors">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into openstack_flavors
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="flavorType != null">
+        flavor_type,
+      </if>
+      <if test="flavorId != null">
+        flavor_id,
+      </if>
+      <if test="flavorRam != null">
+        flavor_ram,
+      </if>
+      <if test="flavorDisk != null">
+        flavor_disk,
+      </if>
+      <if test="flavorName != null">
+        flavor_name,
+      </if>
+      <if test="flavorVcpu != null">
+        flavor_vcpu,
+      </if>
+      <if test="extraSpecs != null">
+        extra_specs,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="flavorType != null">
+        #{flavorType,jdbcType=VARCHAR},
+      </if>
+      <if test="flavorId != null">
+        #{flavorId,jdbcType=VARCHAR},
+      </if>
+      <if test="flavorRam != null">
+        #{flavorRam,jdbcType=INTEGER},
+      </if>
+      <if test="flavorDisk != null">
+        #{flavorDisk,jdbcType=INTEGER},
+      </if>
+      <if test="flavorName != null">
+        #{flavorName,jdbcType=VARCHAR},
+      </if>
+      <if test="flavorVcpu != null">
+        #{flavorVcpu,jdbcType=INTEGER},
+      </if>
+      <if test="extraSpecs != null">
+        #{extraSpecs,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ict.cloud.resource.domain.OpenstackFlavorsCriteria" resultType="java.lang.Long">
+    select count(*) from openstack_flavors
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update openstack_flavors
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.flavorType != null">
+        flavorType = #{record.flavorType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flavorId != null">
+        flavor_id = #{record.flavorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flavorRam != null">
+        flavor_ram = #{record.flavorRam,jdbcType=INTEGER},
+      </if>
+      <if test="record.flavorDisk != null">
+        flavor_disk = #{record.flavorDisk,jdbcType=INTEGER},
+      </if>
+      <if test="record.flavorName != null">
+        flavor_name = #{record.flavorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flavorVcpu != null">
+        flavor_vcpu = #{record.flavorVcpu,jdbcType=INTEGER},
+      </if>
+      <if test="record.extraSpecs != null">
+        extra_specs = #{record.extraSpecs,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update openstack_flavors
+    set id = #{record.id,jdbcType=INTEGER},
+      flavor_type = #{record.flavorType,jdbcType=VARCHAR},
+      flavor_id = #{record.flavorId,jdbcType=VARCHAR},
+      flavor_ram = #{record.flavorRam,jdbcType=INTEGER},
+      flavor_disk = #{record.flavorDisk,jdbcType=INTEGER},
+      flavor_name = #{record.flavorName,jdbcType=VARCHAR},
+      flavor_vcpu = #{record.flavorVcpu,jdbcType=INTEGER},
+      extra_Specs = #{record.extraSpecs,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ict.cloud.resource.domain.OpenstackFlavors">
+    update openstack_flavors
+    <set>
+      <if test="flavorType != null">
+        flavor_type = #{flavorType,jdbcType=VARCHAR},
+      </if>
+      <if test="flavorId != null">
+        flavor_id = #{flavorId,jdbcType=VARCHAR},
+      </if>
+      <if test="flavorRam != null">
+        flavor_ram = #{flavorRam,jdbcType=INTEGER},
+      </if>
+      <if test="flavorDisk != null">
+        flavor_disk = #{flavorDisk,jdbcType=INTEGER},
+      </if>
+      <if test="flavorName != null">
+        flavor_name = #{flavorName,jdbcType=VARCHAR},
+      </if>
+      <if test="flavorVcpu != null">
+        flavor_vcpu = #{flavorVcpu,jdbcType=INTEGER},
+      </if>
+      <if test="extraSpecs != null">
+        extra_specs = #{extraSpecs,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ict.cloud.resource.domain.OpenstackFlavors">
+    update openstack_flavors
+    set flavor_type = #{flavorType,jdbcType=VARCHAR},
+      flavor_id = #{flavorId,jdbcType=VARCHAR},
+      flavor_ram = #{flavorRam,jdbcType=INTEGER},
+      flavor_disk = #{flavorDisk,jdbcType=INTEGER},
+      flavor_name = #{flavorName,jdbcType=VARCHAR},
+      flavor_vcpu = #{flavorVcpu,jdbcType=INTEGER},
+      extra_specs = #{extraSpecs,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectOneByExample" parameterType="com.ict.cloud.resource.domain.OpenstackFlavorsCriteria" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from openstack_flavors
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
+  <select id="selectAllFlavors" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM openstack_flavors
+  </select>
+</mapper>
